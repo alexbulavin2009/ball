@@ -1,5 +1,5 @@
 from tkinter import*
-import random 
+import random
 import time
 class Stick:
     def __init__(self, canvas, color):
@@ -12,8 +12,8 @@ class Stick:
         self.canvas.bind_all('<KeyPress-Right>', self.turn_right)
     def drow(self):
         self.canvas.move(self.id, self.x, 0)
-        pos = self.canvas.coords(self.id) # поточні координати об'єкта
-    
+        pos = self.canvas.coords(self.id) 
+                                                                             
         if pos[0] <= 0:
             self.x = 0
         if pos[2] >= self.canvas_width:
@@ -22,7 +22,7 @@ class Stick:
         self.x = -2
     def turn_right(self, evt):
         self.x = 2
-         
+                     
 class Ball:
     def __init__(self, canvas, stick, color):
         self.canvas = canvas
@@ -35,6 +35,7 @@ class Ball:
         self.y = -1
         self.canvas_height = self.canvas.winfo_height()
         self.canvas_width = self.canvas.winfo_width()
+        self.hit_bottom = False
     def hit_stick(self, pos):
         stick_pos = self.canvas.coords(self.stick.id)
         if pos[2] >= stick_pos[0] and pos[0] <= stick_pos[2]:
@@ -47,7 +48,7 @@ class Ball:
         if pos[1] <= 0:
             self.y = 1
         if pos[3] >= self.canvas_height:
-            self.y = -1
+            self.hit_bottom = True
         if pos[0] <= 0:
             self.x = 1
         if pos[2] >= self.canvas_width:
@@ -65,8 +66,9 @@ tk.update()
 stick = Stick(canvas, 'black')
 ball = Ball(canvas, stick, 'red')
 while 1:
-    ball.drow()
-    stick.drow()
+    if ball.hit_bottom == False:
+        ball.drow()
+        stick.drow()
     tk.update_idletasks()
     tk.update()
-    time.sleep(0.005)
+    time.sleep(0.004)
